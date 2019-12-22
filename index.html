@@ -52,8 +52,6 @@
                             lng: position.coords.longitude
                         };
 
-
-                    }, function() {
                         directionsService.route(
                             {
                                 origin: pos,
@@ -67,6 +65,10 @@
                                     window.alert('Directions request failed due to ' + status);
                                 }
                             });
+
+
+                    }, function() {
+
 
 
                     });
