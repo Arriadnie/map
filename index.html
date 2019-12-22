@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>map</title>
+
+    <link rel="stylesheet" href="./main.css">
+</head>
+<body>
+
+    <select name="mode" id="mode">
+        <option value="DRIVING">Автомобілем</option>
+        <option value="WALKING">Пішки</option>
+        <option value="TRANSIT">Громадським транспортом</option>
+
+    </select>
+
+    <label for="">
+        <input type="text" name="destination" id="destination">
+    </label>
+
+    <label for="">
+        <input type="checkbox" id="location" name="location">
+        Використати моє місцезнаходження
+    </label>
+
+    <a href="#" class="makeRoad">Прокласти маршрут</a>
+
+    <div id="map"></div>
+
+    <script>
+
+
+
+
+        function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+
+            let pos = { lat: 50.402848, lng: 30.619289};
+            let modeSelect = document.getElementById('mode');
+            if (document.querySelector('#location').checked) {
+
+                let startPos;
+                let geoSuccess = function(position) {
+                    startPos = position;
+
+                    pos= {lat: startPos.coords.latitude.toFixed(6), lng: startPos.coords.longitude.toFixed(6)};
+
+                    console.log(startPos.coords.latitude.toFixed(6));
+                    console.log( startPos.coords.longitude.toFixed(6));
+                };
+                navigator.geolocation.getCurrentPosition(geoSuccess);
+
+            }
+
+            directionsService.route(
+                {
+                    origin: pos,
+                    destination:  document.querySelector('#destination').value,
+                    travelMode: modeSelect[modeSelect.selectedIndex].value
+                },
+                function(response, status) {
+                    if (status === 'OK') {
+                        directionsRenderer.setDirections(response);
+                    } else {
+                        window.alert('Directions request failed due to ' + status);
+                    }
+                });
+
+        }
+
+
+        function initMap() {
+            let directionsService = new google.maps.DirectionsService();
+            let directionsRenderer = new google.maps.DirectionsRenderer();
+            let pos = { lat: 50.388667, lng: 30.518540};
+
+            let opt = {
+                center: pos ,
+                zoom: 15
+            };
+
+            let myMap = new google.maps.Map(document.getElementById("map"), opt);
+
+            let marker = new google.maps.Marker({
+                position: pos,
+                map: myMap,
+                title: 'Hello World!'
+            });
+
+            directionsRenderer.setMap(myMap);
+
+            let onChangeHandler = function() {
+                calculateAndDisplayRoute(directionsService, directionsRenderer);
+            };
+
+            document.querySelector('.makeRoad').addEventListener('click', onChangeHandler );
+
+        }
+
+
+
+
+    </script>
+
+
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8nsIrrDrC7Ww9iV_QwLL3-itWVrRUmyU&callback=initMap" async defer></script>
+
+</body>
+</html>
