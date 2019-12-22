@@ -18,11 +18,11 @@
 
     </select>
 
-    <label for="">
+    <label >
         <input type="text" name="destination" id="destination">
     </label>
 
-    <label for="">
+    <label >
         <input type="checkbox" id="location" name="location">
         Використати моє місцезнаходження
     </label>
@@ -36,38 +36,51 @@
 
 
 
-        function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+        function calculateAndDisplayRoute(directionsService, directionsRenderer, map) {
 
-            let pos = { lat: 50.402848, lng: 30.619289};
+            let pos = { lat: 50.388667, lng: 30.518540};
+            let destination;
             let modeSelect = document.getElementById('mode');
             if (document.querySelector('#location').checked) {
+                infoWindow = new google.maps.InfoWindow;
 
-                let startPos;
-                let geoSuccess = function(position) {
-                    startPos = position;
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
 
-                    pos= {lat: startPos.coords.latitude.toFixed(6), lng: startPos.coords.longitude.toFixed(6)};
+                        destination = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
 
-                    console.log(startPos.coords.latitude.toFixed(6));
-                    console.log( startPos.coords.longitude.toFixed(6));
-                };
-                navigator.geolocation.getCurrentPosition(geoSuccess);
+
+                    }, function() {
+
+                    });
+                } else {
+                    // Browser doesn't support Geolocation
+                    console.log('Browser doesn\'t support Geolocation')
+
+                }
 
             }
 
-            directionsService.route(
-                {
-                    origin: pos,
-                    destination:  document.querySelector('#destination').value,
-                    travelMode: modeSelect[modeSelect.selectedIndex].value
-                },
-                function(response, status) {
-                    if (status === 'OK') {
-                        directionsRenderer.setDirections(response);
-                    } else {
-                        window.alert('Directions request failed due to ' + status);
-                    }
-                });
+
+            setTimeout(function() {
+                directionsService.route(
+                    {
+                        origin: pos,
+                        destination: destination || document.querySelector('#destination').value,
+                        travelMode: modeSelect[modeSelect.selectedIndex].value
+                    },
+                    function(response, status) {
+                        if (status === 'OK') {
+                            directionsRenderer.setDirections(response);
+                        } else {
+                            window.alert('Directions request failed due to ' + status);
+                        }
+                    });
+
+            }, 500)
 
         }
 
@@ -84,6 +97,7 @@
 
             let myMap = new google.maps.Map(document.getElementById("map"), opt);
 
+
             let marker = new google.maps.Marker({
                 position: pos,
                 map: myMap,
@@ -93,7 +107,7 @@
             directionsRenderer.setMap(myMap);
 
             let onChangeHandler = function() {
-                calculateAndDisplayRoute(directionsService, directionsRenderer);
+                calculateAndDisplayRoute(directionsService, directionsRenderer, myMap);
             };
 
             document.querySelector('.makeRoad').addEventListener('click', onChangeHandler );
