@@ -11,27 +11,30 @@
 </head>
 <body>
 
-    <select name="mode" id="mode">
+    <div>Виберіть тип трпнспорту
+        <select name="mode" id="mode">
         <option value="DRIVING">Автомобілем</option>
         <option value="WALKING">Пішки</option>
         <option value="TRANSIT">Громадським транспортом</option>
 
     </select>
-
+    </div>
     <label >
+        Ведіть місце призначення
         <input type="text" name="destination" id="destination">
     </label>
+    <p>Або</p>
 
     <label >
         <input type="checkbox" id="location" name="location">
         Використати моє місцезнаходження
     </label>
 
-    <a href="#" class="makeRoad">Прокласти маршрут</a>
+    <a href="#" class="makeRoad link">Прокласти маршрут</a>
 
     <div id="map"></div>
 
-    <a href="#" onclick="mapsSelector(event);">Відкрити в браузері</a>
+    <a href="#" class="link" onclick="mapsSelector(event);">Відкрити в браузері</a>
 
     <script>
 
