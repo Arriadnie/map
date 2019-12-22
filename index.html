@@ -31,9 +31,23 @@
 
     <div id="map"></div>
 
+    <a href="#" onclick="mapsSelector(event);">Відкрити в браузері</a>
+
     <script>
 
+        function mapsSelector(e) {
+            e.preventDefault();
+            // if /* if we're on iOS, open in Apple Maps */
+            // ((navigator.platform.indexOf("iPhone") != -1) ||
+            //     (navigator.platform.indexOf("iPod") != -1) ||
+            //     (navigator.platform.indexOf("iPad") != -1))
+            //     window.open("maps://maps.google.com/maps?daddr=lat,long&amp;ll=");
+            //
+            // else /* else use Google */
+                window.open("https://maps.google.com/maps?daddr=50.388667,30.518540&amp;ll=");
 
+
+        }
 
 
         function calculateAndDisplayRoute(directionsService, directionsRenderer, map) {
@@ -65,19 +79,12 @@
                                     window.alert('Directions request failed due to ' + status);
                                 }
                             });
-
-
                     }, function() {
-
-
-
                     });
                 } else {
                     // Browser doesn't support Geolocation
                     console.log('Browser doesn\'t support Geolocation')
                     alert('Browser doesn\'t support Geolocation')
-
-
                 }
 
             } else {
@@ -94,14 +101,7 @@
                             window.alert('Directions request failed due to ' + status);
                         }
                     });
-
             }
-
-
-
-
-
-
         }
 
 
@@ -133,9 +133,6 @@
             document.querySelector('.makeRoad').addEventListener('click', onChangeHandler );
 
         }
-
-
-
 
     </script>
 
