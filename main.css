@@ -6,8 +6,8 @@
 .link {
     margin-top: 20px;
     color: black;
-    display: flex;
-    align-items: flex-start;
+    display: block;
+
     font-size: 20px;
     margin-bottom: 20px;
     width: 100%;
